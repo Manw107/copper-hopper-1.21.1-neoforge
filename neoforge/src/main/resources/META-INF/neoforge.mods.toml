@@ -1,0 +1,23 @@
+modLoader="javafml"
+loaderVersion="[4.0,)"
+license="MIT"
+
+[[mods]]
+modId="copperhopper"
+version="${version}"
+displayName="Create: Copper Hopper"
+description="Vanilla-friendly item filtering. NeoForge 1.21.1 backport of Copper Hopper by pcal.net"
+authors="[pcal.net], Manw (NeoForge 1.21.1 backport)"
+credits="Original Copper Hopper mod by pcal43 (pcal.net), MIT licensed. NeoForge 1.21.1 backport by Manw"
+logoFile="assets/copperhopper/textures/item/copper_hopper.png"
+
+[[dependencies.copperhopper]]
+modId="neoforge"
+mandatory=true
+versionRange="[21.1,)"
+
+[[mixins]]
+config = "copperhopper.mixins.json"
+
+[[mixins]]
+config = "copperhopper-neoforge.mixins.json"

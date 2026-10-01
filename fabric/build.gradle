@@ -1,0 +1,86 @@
+plugins {
+    id 'fabric-loom'
+}
+
+base {
+    archivesName = project.archives_base_name_fabric
+}
+
+version = project.mod_version
+group = project.maven_group
+
+repositories {
+    maven { url = "https://maven.fabricmc.net/" }
+    maven { url = "https://repo.spongepowered.org/maven/" }
+    maven { url = 'https://maven.nucleoid.xyz/' }
+    mavenCentral()
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // Polymer
+    modCompileOnly "eu.pb4:polymer-core:${project.polymer_version}"
+    modCompileOnly "eu.pb4:polymer-resource-pack:${project.polymer_version}"
+
+    implementation project(":common")
+}
+
+processResources {
+    inputs.property "version", project.version
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+sourceSets {
+    main {
+        java { srcDir project(":common").file("src/main/java") }
+        resources { srcDir project(":common").file("src/main/resources") }
+    }
+    test {
+        resources.srcDirs = ["src/test/resources"]
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 21
+}
+
+loom {
+    runs {
+        client {
+            client()
+            setConfigName("Fabric Client")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        server {
+            server()
+            setConfigName("Fabric Server")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+    }
+    mixin {
+        defaultRefmapName = "copperhopper-refmap.json"
+    }
+    mods {
+        "copperhopper" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+java {
+    withSourcesJar()
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.archives_base_name_fabric}" }
+    }
+}

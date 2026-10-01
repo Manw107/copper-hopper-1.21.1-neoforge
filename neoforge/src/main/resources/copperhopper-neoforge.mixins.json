@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.pcal.copperhopper.neoforge.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "VanillaInventoryCodeHooksMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

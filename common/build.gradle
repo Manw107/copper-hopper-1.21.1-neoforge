@@ -1,0 +1,52 @@
+plugins {
+    id 'fabric-loom'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+repositories {
+    maven { url = "https://maven.fabricmc.net/" }
+    maven { url = "https://repo.spongepowered.org/maven/" }
+    mavenCentral()
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+
+    compileOnly "org.spongepowered:mixin:${project.spongepowered_version}"
+    annotationProcessor "org.spongepowered:mixin:${project.spongepowered_version}:processor"
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${project.junit_version}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${project.junit_version}"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+    options.compilerArgs += ["-AdefaultObfuscationEnv=named"]
+    it.options.release = 21
+}
+
+loom {
+    runs {
+        // nessuna run config per il modulo common
+    }
+    mixin {
+        useLegacyMixinAp = true
+        defaultRefmapName = "copperhopper-refmap.json"
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+    withSourcesJar()
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.archives_base_name_common}" }
+    }
+}
